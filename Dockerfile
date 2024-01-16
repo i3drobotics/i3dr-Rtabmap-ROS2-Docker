@@ -36,11 +36,11 @@ RUN git clone --branch humble-devel https://github.com/i3drobotics/phase_rtabmap
 RUN python3 -m pip install --force-reinstall -v "setuptools==58.2.0"
 
 # Add calibration files and pyphase_example to the image
-RUN cd ~
 RUN mkdir -p ~/data
 RUN mkdir -p ~/data/pointclouds
-COPY ./pyphase_example.py ~/data/pyphase_example.py
-ADD ./calibrations ~/data/calibrations
+WORKDIR /root/data
+COPY ./pyphase_example.py /pyphase_example.py
+ADD ./calibrations /calibrations
 
 # colcon build gives "Duplicate package names not supported" error when building
 # with Docker. However this error doesn't happen if you do the colcon build
