@@ -39,8 +39,8 @@ RUN python3 -m pip install --force-reinstall -v "setuptools==58.2.0"
 RUN cd ~
 RUN mkdir -p ~/data
 RUN mkdir -p ~/data/pointclouds
-COPY pyphase_example.py data/pyphase_example.py
-ADD calibrations data/calibrations
+COPY ./pyphase_example.py ~/data/pyphase_example.py
+ADD ./calibrations ~/data/calibrations
 
 # colcon build gives "Duplicate package names not supported" error when building
 # with Docker. However this error doesn't happen if you do the colcon build
