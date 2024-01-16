@@ -41,6 +41,7 @@ RUN mkdir -p ~/data/pointclouds
 WORKDIR /root/data
 COPY ./pyphase_example.py pyphase_example.py
 ADD ./calibrations calibrations
+RUN python3 -m pip install opencv-python
 
 # colcon build gives "Duplicate package names not supported" error when building
 # with Docker. However this error doesn't happen if you do the colcon build
