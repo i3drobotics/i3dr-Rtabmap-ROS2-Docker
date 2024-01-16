@@ -67,3 +67,17 @@ colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
 ```
 source ~/dev_ws/install/setup.bash
 ```
+
+### Test the camera
+Inside the container navigate to ~/data and run:
+```
+python3 pyphase_example.py
+```
+
+### Running a RTabMap Scan
+Inside the container navigate to ~/dev_ws and run:
+```
+ros2 launch phase_rtabmap_ros2 phase_rtabmap_launch.py 
+```
+CTRL-C to stop the scan.
+CTRL-D to quit the docker image.
