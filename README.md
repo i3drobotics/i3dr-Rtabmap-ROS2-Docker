@@ -77,7 +77,7 @@ python3 pyphase_example.py
 ### Running a RTabMap Scan
 Inside the container navigate to ~/ros2_ws and run:
 ```
-ros2 launch phase_rtabmap_ros2 phase_rtabmap_launch.py 
+ros2 launch phase_rtabmap_ros2 phase_rtabmap_launch.py left_serial:=40098272 right_serial:=40098282 camera_name:=I3DRTitania_746974616e24317 device_type:=titania interface_type:=usb exposure:=10000
 ```
 CTRL-C to stop the scan.
 CTRL-D to quit the docker image.

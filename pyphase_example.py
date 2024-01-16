@@ -18,11 +18,17 @@ def main():
         print("Right Serial: " + device_info.getRightCameraSerial())
 
     # Choose first camera
+
     first_device = device_infos[0]
-    print("Selecting first camera: " + first_device.getUniqueSerial())
+
     camera_name = first_device.getUniqueSerial()
     left_serial = first_device.getLeftCameraSerial()
     right_serial = first_device.getRightCameraSerial()
+
+    print("\nSelecting first camera:")
+    print(f"    Camera name: {camera_name}")
+    print(f"    Left serial: {left_serial}")
+    print(f"    Right serial: {right_serial}")
 
     device_type = phase.stereocamera.CameraDeviceType.DEVICE_TYPE_TITANIA
     interface_type = phase.stereocamera.CameraInterfaceType.INTERFACE_TYPE_USB
