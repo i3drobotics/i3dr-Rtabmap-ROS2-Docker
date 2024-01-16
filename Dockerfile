@@ -24,12 +24,12 @@ RUN python3 -m pip install ~/pyphase310/phase-0.3.0-cp310-cp310-linux_x86_64.whl
 RUN python3 -m pip install numpy --upgrade
 
 # Create ROS2 workspace
-RUN mkdir -p ~/dev_ws/src
-RUN cd ~/dev_ws
+RUN mkdir -p ~/ros2_ws/src
+RUN cd ~/ros2_ws
 RUN source /opt/ros/humble/setup.bash
 
 # Clone i3drobotics repo
-RUN git clone --branch humble-devel https://github.com/i3drobotics/phase_rtabmap_ros2.git ~/dev_ws/src/phase_rtabmap_ros2
+RUN git clone --branch humble-devel https://github.com/i3drobotics/phase_rtabmap_ros2.git ~/ros2_ws/src/phase_rtabmap_ros2
 
 # Install source folder into workspace
 # colcon build requires older version of setuptools, otherwise setup.py doesn't work.
@@ -43,12 +43,12 @@ COPY ./pyphase_example.py pyphase_example.py
 ADD ./calibrations calibrations
 RUN python3 -m pip install opencv-python
 
-# Change to dev_ws for convenience
-WORKDIR /root/dev_ws
+# Change to ros2_ws for convenience
+WORKDIR /root/ros2_ws
 
 # colcon build gives "Duplicate package names not supported" error when building
 # with Docker. However this error doesn't happen if you do the colcon build
 # manually inside the container. Until this bug is fixed the following lines are done manually:
-#RUN cd ~/dev_ws
+#RUN cd ~/ros2_ws
 #RUN colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
-#RUN source ~/dev_ws/install/setup.bash
+#RUN source ~/ros2_ws/install/setup.bash

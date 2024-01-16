@@ -18,7 +18,7 @@ sudo apt-get install xorg openbox
 1. Run [run.sh](run.sh)
 2. Inside the container change directory to the workspace with:
 ```
-cd ~/dev_ws
+cd ~/ros2_ws
 ```
 3. Then build the ROS2 workspace with:
 ```
@@ -26,7 +26,7 @@ colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
 ```
 4. Then run:
 ```
-source ~/dev_ws/install/setup.bash
+source ~/ros2_ws/install/setup.bash
 ```
 
 ## Windows Host Machine
@@ -57,7 +57,7 @@ This only needs to be done once as the image will be stored locally.
 2. Start the container with [run.bat](run.bat), or [run_and_remove.bat](run_and_remove.bat) if you want the container to be automatically removed after you close Docker.
 3. Inside the container change directory to the workspace with:
 ```
-cd ~/dev_ws
+cd ~/ros2_ws
 ```
 4. Then build the ROS2 workspace with:
 ```
@@ -65,7 +65,7 @@ colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
 ```
 5. Then run:
 ```
-source ~/dev_ws/install/setup.bash
+source ~/ros2_ws/install/setup.bash
 ```
 
 ### Test the camera
@@ -75,7 +75,7 @@ python3 pyphase_example.py
 ```
 
 ### Running a RTabMap Scan
-Inside the container navigate to ~/dev_ws and run:
+Inside the container navigate to ~/ros2_ws and run:
 ```
 ros2 launch phase_rtabmap_ros2 phase_rtabmap_launch.py 
 ```
