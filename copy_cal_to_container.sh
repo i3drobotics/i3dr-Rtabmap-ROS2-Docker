@@ -12,14 +12,15 @@ if [ ! -d "$calibration_data_folder" ]; then
     exit 1
 fi
 
+echo "Source folder: $calibration_data_folder"
+echo "Destination folder: rtab:/root/data/calibrations"
+
 # Copy the calibration data folder into the Docker container
-docker cp "$calibration_data_folder" rtab:/root/data/calibrations
+docker cp "$calibration_data_folder" rtab:/root/data
 
 # Check if the copy operation was successful
 if [ $? -eq 0 ]; then
     echo "Calibration data copied successfully into rtab Docker environment."
-    echo "Source folder: $calibration_data_folder"
-    echo "Destination folder: rtab:/root/data/calibrations"
 else
     echo "Error: Failed to copy calibration data into rtab Docker environment."
     exit 1
