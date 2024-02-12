@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Get the directory path where the script is located
-script_dir=$(dirname "$(realpath "$0")")
+script_dir="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 # Construct the full path to the calibration data folder
 calibration_data_folder="$script_dir/calibrations"
