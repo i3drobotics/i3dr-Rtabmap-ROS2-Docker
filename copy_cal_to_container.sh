@@ -4,7 +4,7 @@
 script_dir="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 # Construct the full path to the calibration data folder
-calibration_data_folder="$script_dir/calibrations"
+calibration_data_folder="$script_dir/calibration"
 
 # Check if the folder exists
 if [ ! -d "$calibration_data_folder" ]; then
