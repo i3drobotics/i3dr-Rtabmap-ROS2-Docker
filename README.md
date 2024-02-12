@@ -1,6 +1,8 @@
 # i3dr-Rtabmap-ROS2-Docker
 Creating a Docker image to set up a ROS2 workspace that integrates pyphase and rtabmap.
 
+
+
 ## Ubuntu Host Machine
 ### Install Docker
 Install docker using these instructions: https://docs.docker.com/engine/install/ubuntu/
@@ -15,7 +17,7 @@ sudo apt-get install xorg openbox
 2. Run [build.sh](build.sh)
 
 ### Running a Container from the Image
-1. Run [run.sh](run.sh)
+1. Run [run.sh](run.sh), or [run_and_remove.sh](run_and_remove.sh) if you want the container to be automatically removed after you close Docker.
 2. Inside the container change directory to the workspace with:
 ```
 cd ~/ros2_ws
@@ -28,6 +30,22 @@ colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
 ```
 source ~/ros2_ws/install/setup.bash
 ```
+
+### Test the camera
+Inside the container navigate to ~/data and run:
+```
+python3 pyphase_example.py
+```
+
+### Running a RTabMap Scan
+Inside the container navigate to ~/ros2_ws and run:
+```
+ros2 launch phase_rtabmap_ros2 phase_rtabmap_launch.py left_serial:=40098272 right_serial:=40098282 camera_name:=I3DRTitania_746974616e24317 device_type:=titania interface_type:=usb exposure:=10000
+```
+CTRL-C to stop the scan.
+CTRL-D to quit the docker image.
+
+
 
 ## Windows Host Machine
 ### Downloads
