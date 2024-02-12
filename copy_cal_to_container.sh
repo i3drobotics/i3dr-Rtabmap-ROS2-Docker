@@ -13,10 +13,10 @@ if [ ! -d "$calibration_data_folder" ]; then
 fi
 
 echo "Source folder: $calibration_data_folder"
-echo "Destination folder: rtab:/root/data/calibrations"
+echo "Destination folder: rtab:~/ros2_ws/install/phase_rtabmap_ros2/share/phase_rtabmap_ros2/cal"
 
-# Copy the calibration data folder into the Docker container
-docker cp "$calibration_data_folder" rtab:/root/data
+# Copy the contents of the calibration data folder into the Docker container
+docker cp "$calibration_data_folder/." rtab:~/ros2_ws/install/phase_rtabmap_ros2/share/phase_rtabmap_ros2/cal
 
 # Check if the copy operation was successful
 if [ $? -eq 0 ]; then
