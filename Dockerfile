@@ -8,6 +8,10 @@ RUN apt-get install -y python3-pip
 
 RUN sudo apt install wget
 
+# Copy the license files from the host to the image
+RUN mkdir -p /root/.i3dr/lic
+COPY ./licenses /root/.i3dr/lic
+
 # Get pyphase for Linux
 RUN mkdir -p ~/pyphase310
 RUN wget -P ~/pyphase310 https://github.com/i3drobotics/pyphase/releases/download/v0.3.0/phase-0.3.0-cp310-cp310-linux_x86_64.whl
