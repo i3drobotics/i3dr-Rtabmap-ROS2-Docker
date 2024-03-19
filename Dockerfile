@@ -44,7 +44,7 @@ RUN mkdir -p ~/data
 RUN mkdir -p ~/data/pointclouds
 WORKDIR /root/data
 COPY ./pyphase_example.py pyphase_example.py
-ADD ./calibrations calibrations
+ADD ./calibration calibration
 RUN python3 -m pip install opencv-python
 
 # Change to ros2_ws for convenience
