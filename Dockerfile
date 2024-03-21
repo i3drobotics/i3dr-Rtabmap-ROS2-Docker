@@ -50,9 +50,8 @@ COPY ./pyphase_example.py pyphase_example.py
 ADD ./calibration calibration
 ADD ./licenses licenses
 
-# Add and run a script that sets the hostid by setting the ip
+# Add a script that sets the hostid by setting the ip
 COPY ./license_scripts/set_hostid_ip.sh set_hostid_ip.sh
-RUN source ./set_hostid_ip.sh
 
 # Change to ros2_ws for convenience
 WORKDIR /root/ros2_ws
