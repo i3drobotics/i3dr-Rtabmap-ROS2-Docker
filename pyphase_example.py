@@ -2,7 +2,6 @@
 
 import phase.pyphase as phase
 import cv2
-import os
 from pathlib import Path
 
 def main():
