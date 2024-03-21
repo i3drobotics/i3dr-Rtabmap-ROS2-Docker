@@ -51,7 +51,7 @@ ADD ./calibration calibration
 ADD ./licenses licenses
 
 # Add a script that sets the hostid by setting the ip
-COPY ./license_scripts/set_hostid_ip.sh set_hostid_ip.sh
+COPY ./license_scripts/lic_setup.sh lic_setup.sh
 
 # Change to ros2_ws for convenience
 WORKDIR /root/ros2_ws
