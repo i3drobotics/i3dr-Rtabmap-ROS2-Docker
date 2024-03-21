@@ -39,13 +39,20 @@ RUN git clone --branch humble-devel https://github.com/i3drobotics/phase_rtabmap
 # colcon build requires older version of setuptools, otherwise setup.py doesn't work.
 RUN python3 -m pip install --force-reinstall -v "setuptools==58.2.0"
 
-# Add calibration files and pyphase_example to the image
+# Install opencv
+RUN python3 -m pip install opencv-python
+
+# Add calibration files, licenses and pyphase_example to the image
 RUN mkdir -p ~/data
 RUN mkdir -p ~/data/pointclouds
 WORKDIR /root/data
 COPY ./pyphase_example.py pyphase_example.py
 ADD ./calibration calibration
-RUN python3 -m pip install opencv-python
+ADD ./licenses licenses
+
+# Add and run a script that sets the hostid by setting the ip
+COPY ./license_scripts/set_hostid_ip.sh set_hostid_ip.sh
+RUN ./set_hostid_ip.sh
 
 # Change to ros2_ws for convenience
 WORKDIR /root/ros2_ws
