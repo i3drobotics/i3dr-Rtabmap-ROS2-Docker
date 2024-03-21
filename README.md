@@ -99,3 +99,6 @@ ros2 launch phase_rtabmap_ros2 phase_rtabmap_launch.py left_serial:=40098272 rig
 ```
 CTRL-C to stop the scan.
 CTRL-D to quit the docker image.
+
+## To Do
+- Switch to using nvidia-docker
