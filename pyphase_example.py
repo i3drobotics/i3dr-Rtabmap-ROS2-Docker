@@ -33,21 +33,17 @@ def main():
     device_type = phase.stereocamera.CameraDeviceType.DEVICE_TYPE_TITANIA
     interface_type = phase.stereocamera.CameraInterfaceType.INTERFACE_TYPE_USB
 
-    script_path = os.path.dirname(os.path.realpath(__file__))
-    print(script_path)
-
     script_dir = Path(__file__).parent.absolute()
-    calibrations_dir = script_dir / "calibrations"
-    chosen_cal_dir = calibrations_dir / "mycal18102023"
+    cal_dir = script_dir / "calibration"
 
-    l_yaml = chosen_cal_dir / "left.yaml"
-    r_yaml = chosen_cal_dir / "right.yaml"
+    l_yaml = cal_dir / "left.yaml"
+    r_yaml = cal_dir / "right.yaml"
     if not l_yaml.exists() or not r_yaml.exists():
         msg = ""
         if not l_yaml.exists():
-            msg += "Left calibration file not found. "
+            msg += f'Left calibration file not found at "{l_yaml}"\n'
         if not r_yaml.exists():
-            msg += "Right calibration file not found. "
+            msg += f'Right calibration file not found at "{r_yaml}"\n'
         print(msg)
         return
     left_yaml = str(l_yaml)
