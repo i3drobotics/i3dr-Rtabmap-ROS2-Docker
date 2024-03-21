@@ -17,16 +17,32 @@ for ((i=0; i<${#camera_paths[@]}; i++)); do
     echo "Camera $((i+1)) path: ${camera_paths[i]}"
 done
 
+# Prompt user whether to run the docker container with --rm
+read -p "Do you want to run the Docker container with --rm? (y/n): " run_rm
+if [[ $run_rm == "y" ]]; then
+    rm_flag="--rm"
+else
+    rm_flag=""
+fi
+
+# Prompt user whether to include the two --device
+read -p "Do you want to include the two --device flags? (y/n): " include_device
+if [[ $include_device == "y" ]]; then
+    device_flags="--device ${camera_paths[0]} --device ${camera_paths[1]}"
+else
+    device_flags=""
+fi
+
 # Start X server
 xhost +
 
 # Run Docker container with GUI support
 # May need to change --device paths depending on your system
-sudo docker run -it --name rtab \
+sudo docker run -it $rm_flag --name rtab \
     -e DISPLAY=$DISPLAY \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
-    --device "${camera_paths[0]}" \
-    --device "${camera_paths[1]}" \
+    $device_flags \
+    --hostname I3DRWL004 \
     humble-rtabmap-pyphase
 
 # Revoke access to X server
