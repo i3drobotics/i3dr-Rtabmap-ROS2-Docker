@@ -1,1 +1,0 @@
-call docker run -it --rm --name frtab --gpus all --hostname I3DRWL004 foxy-rtabmap-pyphase
