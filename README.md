@@ -45,6 +45,8 @@ CTRL-D to quit the docker image.
 
 
 ## Windows Host Machine
+Note: Running an ubuntu docker container with a Windows host machine will not allow external devices (i.e. cameras) to connect. 
+
 ### Downloads
 1. Docker desktop
 2. Xming
@@ -69,7 +71,7 @@ This only needs to be done once as the image will be stored locally.
 
 ### Running a Container from the Image
 1. Run Xming. When it is running you will see an X icon in the system tray.
-2. Start the container with [run.bat](run.bat), or [run_and_remove.bat](run_and_remove.bat) if you want the container to be automatically removed after you close Docker.
+2. Start the container with [run.bat](run.bat).
 3. Inside the container ensure you are in /root/dev_ws and run:
 ```
 source /opt/ros/foxy/setup.bash
@@ -79,20 +81,3 @@ colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
 . install/setup.bash
 source /root/data/lic_setup.sh
 ```
-
-### Test the camera
-Inside the container navigate to ~/data and run:
-```
-python3 pyphase_example.py
-```
-
-### Running a RTabMap Scan
-Inside the container navigate to ~/ros2_ws and run:
-```
-ros2 launch phase_rtabmap_ros2 phase_rtabmap_launch.py left_serial:=40098272 right_serial:=40098282 camera_name:=I3DRTitania_746974616e24317 device_type:=titania interface_type:=usb exposure:=10000
-```
-CTRL-C to stop the scan.
-CTRL-D to quit the docker image.
-
-## To Do
-- Switch to using nvidia-docker
