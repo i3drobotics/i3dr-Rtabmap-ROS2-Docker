@@ -1,64 +1,42 @@
-FROM introlab3it/rtabmap_ros:humble
+FROM nvidia/cudagl:11.4.2-devel-ubuntu20.04
 
-SHELL ["/bin/bash", "-c"] 
+ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get -y update
+# Setup nvidia-docker hooks
+LABEL com.nvidia.volumes.needed="nvidia_driver"
+ENV PATH /usr/local/nvidia/bin:${PATH}
+ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64:${LD_LIBRARY_PATH}
+ENV NVIDIA_VISIBLE_DEVICES \
+    ${NVIDIA_VISIBLE_DEVICES:-all}
+ENV NVIDIA_DRIVER_CAPABILITIES \
+    ${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}graphics
 
-RUN apt-get install -y python3-pip
+# Install required software
+RUN apt update && apt install -y --no-install-recommends \
+        software-properties-common \
+        ca-certificates \
+        build-essential \
+        cmake \
+        git \
+        curl \
+        wget \
+    && apt-get -y autoremove \
+    && apt-get clean \
+    # cleanup
+    && rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
 
-RUN sudo apt install wget
+# Install ROS 2 Foxy dependencies
+RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
+RUN sh -c 'echo "deb [arch=amd64,arm64] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros2-latest.list'
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    ros-foxy-desktop \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy the license files from the host to the image
-RUN mkdir -p /root/.i3dr/lic
-COPY ./licenses /root/.i3dr/lic
+SHELL ["/bin/bash", "-c"]
 
-# Get pyphase for Linux
-RUN mkdir -p ~/pyphase310
-RUN wget -P ~/pyphase310 https://github.com/i3drobotics/pyphase/releases/download/v0.3.0/phase-0.3.0-cp310-cp310-linux_x86_64.whl
-
-# Install pyphase dependencies
-RUN sudo apt install -y libavcodec-dev libavformat-dev libswscale-dev
-RUN sudo apt install -y libgl-dev liblapack-dev libblas-dev libgtk2.0-dev
-RUN sudo apt install -y libgstreamer1.0-0 libgstreamer-plugins-base1.0-0
-RUN sudo apt install -y zlib1g libstdc++6
-RUN sudo apt install -y libc6 libgcc1
-
-# Install pyphase and upgrade numpy
-RUN python3 -m pip install ~/pyphase310/phase-0.3.0-cp310-cp310-linux_x86_64.whl
-RUN python3 -m pip install numpy --upgrade
-
-# Create ROS2 workspace
-RUN mkdir -p ~/ros2_ws/src
-RUN cd ~/ros2_ws
-RUN source /opt/ros/humble/setup.bash
-
-# Clone i3drobotics repo
-RUN git clone --branch humble-devel https://github.com/i3drobotics/phase_rtabmap_ros2.git ~/ros2_ws/src/phase_rtabmap_ros2
-
-# Install source folder into workspace
-# colcon build requires older version of setuptools, otherwise setup.py doesn't work.
-RUN python3 -m pip install --force-reinstall -v "setuptools==58.2.0"
-
-# Install opencv
-RUN python3 -m pip install opencv-python
-
-# Add calibration files, licenses and pyphase_example to the image
-RUN mkdir -p ~/data
-RUN mkdir -p ~/data/pointclouds
-WORKDIR /root/data
-COPY ./pyphase_example.py pyphase_example.py
-ADD ./calibration calibration
-ADD ./licenses licenses
-
-# Add a script that sets the hostid by setting the ip
-COPY ./license_scripts/lic_setup.sh lic_setup.sh
-
-# Change to ros2_ws for convenience
-WORKDIR /root/ros2_ws
-
-# colcon build gives "Duplicate package names not supported" error when building
-# with Docker. However this error doesn't happen if you do the colcon build
-# manually inside the container. Until this bug is fixed the following lines are done manually:
-#RUN cd ~/ros2_ws
-#RUN colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
-#RUN source ~/ros2_ws/install/setup.bash
+# CUDA variables required JIT compilation
+# CUDA_CACHE_PATH should be used to attach a volume for caching the JIT compilation
+ENV CUDA_CACHE_MAXSIZE=2147483647
+ENV CUDA_CACHE_DISABLE=0
+ENV CUDA_CACHE_PATH=/root/.nv/ComputeCache
