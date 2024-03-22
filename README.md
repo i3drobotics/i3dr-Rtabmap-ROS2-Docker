@@ -17,18 +17,15 @@ sudo apt-get install xorg openbox
 2. Run [build.sh](build.sh)
 
 ### Running a Container from the Image
-1. Run [run.sh](run.sh), or [run_and_remove.sh](run_and_remove.sh) if you want the container to be automatically removed after you close Docker.
-2. Inside the container change directory to the workspace with:
+1. Run [run.sh](run.sh).
+2. Inside the container ensure you are in /root/dev_ws and run:
 ```
-cd ~/ros2_ws
-```
-3. Then build the ROS2 workspace with:
-```
+source /opt/ros/foxy/setup.bash
+rosdep update && rosdep install --from-paths src --ignore-src -r -y
+export MAKEFLAGS="-j6" # Can be ignored if you have a lot of RAM (>16GB)
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
-```
-4. Then run:
-```
-source ~/ros2_ws/install/setup.bash
+. install/setup.bash
+source /root/data/lic_setup.sh
 ```
 
 ### Test the camera
@@ -73,17 +70,14 @@ This only needs to be done once as the image will be stored locally.
 ### Running a Container from the Image
 1. Run Xming. When it is running you will see an X icon in the system tray.
 2. Start the container with [run.bat](run.bat), or [run_and_remove.bat](run_and_remove.bat) if you want the container to be automatically removed after you close Docker.
-3. Inside the container change directory to the workspace with:
+3. Inside the container ensure you are in /root/dev_ws and run:
 ```
-cd ~/ros2_ws
-```
-4. Then build the ROS2 workspace with:
-```
+source /opt/ros/foxy/setup.bash
+rosdep update && rosdep install --from-paths src --ignore-src -r -y
+export MAKEFLAGS="-j6" # Can be ignored if you have a lot of RAM (>16GB)
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
-```
-5. Then run:
-```
-source ~/ros2_ws/install/setup.bash
+. install/setup.bash
+source /root/data/lic_setup.sh
 ```
 
 ### Test the camera
