@@ -81,3 +81,8 @@ colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
 . install/setup.bash
 source /root/data/lic_setup.sh
 ```
+
+## Developer Notes
+Initially this was built with the line `FROM introlab3it/rtabmap_ros:humble`. This simplified the Dockerfile and allowed us to use Ubuntu 22.04 and ROS2 Humble, but the image did not utilize the GPU, which is necessary for running I3DRSGM. The current implementation uses the GPU and OpenGL, however it is only possible to use Ubuntu 20.04 and ROS2 Foxy.
+
+To allow the I3DRSGM license to be accepted, it is necessary to run the container with the `--hostname yourlicensehostname` flag, so that the hostnbame of the container matches the hostname of the license. It also requires you to match the hostid of the license (only the first six characters seem to be necessary) with the hostid of the docker container. To do this the hostid of the container can be indirectly set by changing the ip address in the hosts file. `echo "yourlicenseipaddress yourlicensehostname" > /etc/hosts`. "yourlicenseipaddress" can be found by converting the hostid of the license to an ip address (see [license_scripts](license_scripts)).
