@@ -1,8 +1,10 @@
+@echo off
+
 :: Run Xming before running this script
 tasklist | find "Xming.exe" > nul
 if errorlevel 1 (
-    echo WARNING: Xming is not running, GUI programs may not work. ^
-    Please run Xming first to use GUI applications in Docker.
+    echo WARNING: Xming is not running, GUI programs may not work.
+    echo Please run Xming first to use GUI applications in Docker.
 )
 
 :: Prompt for --rm flag
