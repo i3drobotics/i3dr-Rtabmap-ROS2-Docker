@@ -40,7 +40,7 @@ xhost +
 # May need to change --device paths depending on your system
 sudo docker run -it \
     $rm_flag \
-    --name rtab \
+    --name frtab \
     --gpus all \
     -e DISPLAY=$DISPLAY \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
