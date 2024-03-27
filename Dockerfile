@@ -68,6 +68,11 @@ RUN python3 -m pip install /root/pyphase38/phase-0.3.0-cp38-cp38-linux_x86_64.wh
 RUN python3 -m pip install numpy --upgrade
 RUN python3 -m pip install opencv-python
 
+# Install missing pyphase dependency
+RUN wget https://github.com/i3drobotics/phobosIntegration/releases/download/v1.0.54/libicu55_55.1-7ubuntu0.5_amd64.deb
+RUN dpkg -i libicu55_55.1-7ubuntu0.5_amd64.deb
+RUN rm libicu55_55.1-7ubuntu0.5_amd64.deb
+
 # Clone i3drobotics repo
 RUN git clone --branch foxy-devel https://github.com/i3drobotics/phase_rtabmap_ros2.git /root/dev_ws/src/phase_rtabmap_ros2
 
