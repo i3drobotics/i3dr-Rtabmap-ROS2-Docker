@@ -56,16 +56,25 @@ def main():
     display_downsample = 0.25
     exposure_value = 10000
 
-    # Check for I3DRSGM license
-    license_valid = phase.stereomatcher.StereoI3DRSGM().isLicenseValid()
-    if license_valid:
-        print("I3DRSGM license accepted")
-        stereo_params = phase.stereomatcher.StereoParams(
-            phase.stereomatcher.StereoMatcherType.STEREO_MATCHER_I3DRSGM,
-            9, 0, 49, False
-        )
+    userinput = input("Do you want to use I3DRSGM stereo matcher? (y/n) ")
+
+    if userinput.lower() == "y":
+        # If the user wants to use the I3DRSGM matcher, we need to check for the license
+        license_valid = phase.stereomatcher.StereoI3DRSGM().isLicenseValid()
+        if license_valid:
+            print("I3DRSGM license accepted")
+            stereo_params = phase.stereomatcher.StereoParams(
+                phase.stereomatcher.StereoMatcherType.STEREO_MATCHER_I3DRSGM,
+                9, 0, 49, False
+            )
+        else:
+            print("Missing or invalid I3DRSGM license. Will use StereoBM")
+            stereo_params = phase.stereomatcher.StereoParams(
+                phase.stereomatcher.StereoMatcherType.STEREO_MATCHER_BM,
+                11, 0, 25, False
+            )
     else:
-        print("Missing or invalid I3DRSGM license. Will use StereoBM")
+        print("Will use StereoBM")
         stereo_params = phase.stereomatcher.StereoParams(
             phase.stereomatcher.StereoMatcherType.STEREO_MATCHER_BM,
             11, 0, 25, False
@@ -84,19 +93,20 @@ def main():
         device_type,
         interface_type)
     # Create stereo camera
-    tinaniaCam = phase.stereocamera.TitaniaStereoCamera(device_info)
+    titaniaCam = phase.stereocamera.TitaniaStereoCamera(device_info)
 
     # Connect camera and start data capture
     print("Connecting to camera...")
-    ret = tinaniaCam.connect()
+    ret = titaniaCam.connect()
+    titaniaCam.enableHardwareTrigger(False)
     if (ret):
-        tinaniaCam.startCapture()
+        titaniaCam.startCapture()
         # Set camera exposure value
-        tinaniaCam.setExposure(exposure_value)
+        titaniaCam.setExposure(exposure_value)
         print("Running camera capture...")
         print("Press 'q' to quit or 'p' to save pointcloud.")
-        while tinaniaCam.isConnected():
-            read_result = tinaniaCam.read()
+        while titaniaCam.isConnected():
+            read_result = titaniaCam.read()
             #print(f"Read result left:\n{read_result.left}")
             #print(f"Read result right:\n{read_result.right}")
             if read_result.valid:
@@ -144,7 +154,7 @@ def main():
                 if c == ord('q'):
                     break
             else:
-                tinaniaCam.disconnect()
+                titaniaCam.disconnect()
                 raise Exception("Failed to read stereo result")
                 
     cv2.destroyAllWindows()
