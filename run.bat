@@ -16,4 +16,4 @@ if /i "%rmflag%"=="Y" (
 )
 
 :: Run Docker container
-call docker run -it %rm% --name frtab --gpus all --hostname I3DRWL004 foxy-rtabmap-pyphase
+call docker run -it %rm% -e DISPLAY=host.docker.internal:0.0 --name frtab --gpus all --hostname I3DRWL004 foxy-rtabmap-pyphase

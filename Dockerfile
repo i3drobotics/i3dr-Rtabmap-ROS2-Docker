@@ -86,6 +86,7 @@ RUN python3 -m pip install pytest==7.2
 RUN mkdir -p /root/data/pointclouds
 WORKDIR /root/data
 COPY ./pyphase_example.py pyphase_example.py
+COPY ./plotter.py plotter.py
 ADD ./calibration calibration
 ADD ./licenses licenses
 
