@@ -82,6 +82,9 @@ RUN python3 -m pip install -U rosdep && rosdep init
 RUN python3 -m pip install -U colcon-common-extensions
 RUN python3 -m pip install pytest==7.2
 
+# for matplotlib gui
+RUN apt-get install -y python3-tk
+
 # Add calibration files, licenses and pyphase_example to the image
 RUN mkdir -p /root/data/pointclouds
 WORKDIR /root/data
