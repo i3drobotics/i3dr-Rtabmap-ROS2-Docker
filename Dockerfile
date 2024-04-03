@@ -17,10 +17,9 @@ ENV CUDA_CACHE_MAXSIZE=2147483647
 ENV CUDA_CACHE_DISABLE=0
 ENV CUDA_CACHE_PATH=/root/.nv/ComputeCache
 
-RUN apt install sudo
-
 # Install required software
 RUN apt update && apt install -y --no-install-recommends \
+        sudo \
         software-properties-common \
         ca-certificates \
         build-essential \
