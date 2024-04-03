@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t humble-rtabmap-pyphase .
+docker build -t foxy-rtabmap-pyphase .

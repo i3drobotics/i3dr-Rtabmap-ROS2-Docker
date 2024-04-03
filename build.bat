@@ -1,2 +1,1 @@
-call docker build -t humble-rtabmap-pyphase .
-pause
+call docker build -t foxy-rtabmap-pyphase .

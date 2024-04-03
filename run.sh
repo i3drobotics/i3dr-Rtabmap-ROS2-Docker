@@ -38,12 +38,15 @@ xhost +
 
 # Run Docker container with GUI support
 # May need to change --device paths depending on your system
-sudo docker run -it $rm_flag --name rtab \
+sudo docker run -it \
+    $rm_flag \
+    --name frtab \
+    --gpus all \
     -e DISPLAY=$DISPLAY \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     $device_flags \
     --hostname I3DRWL004 \
-    humble-rtabmap-pyphase
+    foxy-rtabmap-pyphase
 
 # Revoke access to X server
 xhost -
