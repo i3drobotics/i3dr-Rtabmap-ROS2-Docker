@@ -38,13 +38,13 @@ RUN wget https://www2.baslerweb.com/media/downloads/software/pylon_software/pylo
     dpkg -i pylon_7.4.0.14900-deb0_amd64.deb && \
     rm -rf pylon_7_4_0_14900_linux_x86_64_debs.tar.gz pylon_7.4.0.14900-deb0_amd64.deb
 
-RUN wget https://bugs.launchpad.net/~ubuntu-security-proposed/+archive/ubuntu/ppa/+build/18845128/+files/libicu55_55.1-7ubuntu0.5_amd64.deb && \
-    wget http://security.ubuntu.com/ubuntu/pool/universe/x/xerces-c/libxerces-c3.1_3.1.3+debian-1_amd64.deb && \
-    wget https://launchpad.net/~ubuntu-security/+archive/ubuntu/ppa/+build/15108504/+files/libpng12-0_1.2.54-1ubuntu1.1_amd64.deb && \
-    dpkg -i libicu55_55.1-7ubuntu0.5_amd64.deb && \
-    dpkg -i libxerces-c3.1_3.1.3+debian-1_amd64.deb && \
-    dpkg -i libpng12-0_1.2.54-1ubuntu1.1_amd64.deb && \
-    rm -rf libicu55_55.1-7ubuntu0.5_amd64.deb libxerces-c3.1_3.1.3+debian-1_amd64.deb libpng12-0_1.2.54-1ubuntu1.1_amd64.deb
+# RUN wget https://bugs.launchpad.net/~ubuntu-security-proposed/+archive/ubuntu/ppa/+build/18845128/+files/libicu55_55.1-7ubuntu0.5_amd64.deb && \
+#     wget http://security.ubuntu.com/ubuntu/pool/universe/x/xerces-c/libxerces-c3.1_3.1.3+debian-1_amd64.deb && \
+#     wget https://launchpad.net/~ubuntu-security/+archive/ubuntu/ppa/+build/15108504/+files/libpng12-0_1.2.54-1ubuntu1.1_amd64.deb && \
+#     dpkg -i libicu55_55.1-7ubuntu0.5_amd64.deb && \
+#     dpkg -i libxerces-c3.1_3.1.3+debian-1_amd64.deb && \
+#     dpkg -i libpng12-0_1.2.54-1ubuntu1.1_amd64.deb && \
+#     rm -rf libicu55_55.1-7ubuntu0.5_amd64.deb libxerces-c3.1_3.1.3+debian-1_amd64.deb libpng12-0_1.2.54-1ubuntu1.1_amd64.deb
 
 # Install ROS 2 Foxy dependencies
 RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
