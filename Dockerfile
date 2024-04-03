@@ -50,7 +50,7 @@ WORKDIR /root/dev_ws
 RUN mkdir -p /root/phase
 WORKDIR /root/phase
 RUN wget https://github.com/i3drobotics/phase/releases/download/v0.3.0/phase-v0.3.0-ubuntu-20.04-x86_64.deb
-RUN apt update && apt install -y --no-install-recommends phase-v0.3.0-ubuntu-20.04-x86_64.deb
+RUN apt update && apt install -f -y --no-install-recommends ./phase-v0.3.0-ubuntu-20.04-x86_64.deb
 #RUN sudo apt install ./phase-v0.3.0-ubuntu-20.04-x86_64.deb
 WORKDIR /root/dev_ws
 
