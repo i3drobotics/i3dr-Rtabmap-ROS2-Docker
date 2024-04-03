@@ -112,8 +112,8 @@ RUN apt-get install -y python3-tk
 # Add calibration files, licenses and pyphase_example to the image
 RUN mkdir -p /root/data/pointclouds
 WORKDIR /root/data
-COPY ./pyphase_example.py pyphase_example.py
-COPY ./plotter.py plotter.py
+COPY ./example_scipts/pyphase_example.py pyphase_example.py
+COPY ./example_scipts/plotter.py plotter.py
 ADD ./calibration calibration
 ADD ./licenses licenses
 
