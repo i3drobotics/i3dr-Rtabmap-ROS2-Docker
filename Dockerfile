@@ -61,15 +61,12 @@ RUN mkdir -p /root/dev_ws/src
 WORKDIR /root/dev_ws
 
 # Install phase
-RUN mkdir -p /root/phase
-WORKDIR /root/phase
-RUN wget https://github.com/i3drobotics/phase/releases/download/v0.3.0/phase-v0.3.0-ubuntu-20.04-x86_64.deb
-RUN sudo apt update && apt install -f -y --no-install-recommends ./phase-v0.3.0-ubuntu-20.04-x86_64.deb
-#RUN sudo apt install ./phase-v0.3.0-ubuntu-20.04-x86_64.deb
-WORKDIR /root/dev_ws
+RUN wget https://github.com/i3drobotics/phase/releases/download/v0.3.0/phase-v0.3.0-ubuntu-20.04-x86_64.deb && \
+    apt update && \
+    apt install -f -y --no-install-recommends ./phase-v0.3.0-ubuntu-20.04-x86_64.deb && \
+    rm -rf ./phase-v0.3.0-ubuntu-20.04-x86_64.deb
 
 # Get pyphase for Linux
-RUN mkdir -p /root/pyphase38
 RUN wget -P /root/pyphase38 https://github.com/i3drobotics/pyphase/releases/download/v0.3.0/phase-0.3.0-cp38-cp38-linux_x86_64.whl
 
 # Install pyphase dependencies
@@ -92,13 +89,13 @@ RUN python3 -m pip install numpy --upgrade
 RUN python3 -m pip install opencv-python
 
 # Install missing pyphase dependency
-RUN wget https://github.com/i3drobotics/phobosIntegration/releases/download/v1.0.54/libicu55_55.1-7ubuntu0.5_amd64.deb
-RUN dpkg -i libicu55_55.1-7ubuntu0.5_amd64.deb
-RUN rm libicu55_55.1-7ubuntu0.5_amd64.deb
+RUN wget https://github.com/i3drobotics/phobosIntegration/releases/download/v1.0.54/libicu55_55.1-7ubuntu0.5_amd64.deb && \
+    dpkg -i libicu55_55.1-7ubuntu0.5_amd64.deb && \
+    rm libicu55_55.1-7ubuntu0.5_amd64.deb
 
+# Can't seem to install pypylon, maybe use some of these?
 # wget https://github.com/basler/pypylon/releases/download/3.0.1/pypylon-3.0.1-cp38-cp38-manylinux_2_31_x86_64.whl
 # python3 -m pip install pypylon-3.0.1-cp38-cp38-manylinux_2_31_x86_64.whl
-
 # wget https://github.com/basler/pypylon/releases/download/2.3.0/pypylon-2.3.0-cp38-cp38-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
 # python3 -m pip install pypylon-2.3.0-cp38-cp38-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
 # pip install sphinx sphinx-rtd-theme setuptools wheel twine flake8 pytest pybind11-stubgen numpydoc
