@@ -45,6 +45,11 @@ SHELL ["/bin/bash", "-c"]
 RUN mkdir -p /root/dev_ws/src
 WORKDIR /root/dev_ws
 
+# Install phase
+RUN mkdir -p /root/phase
+RUN wget -P /root/phase https://github.com/i3drobotics/phase/releases/download/v0.3.0/phase-v0.3.0-ubuntu-20.04-x86_64.deb
+RUN apt install -f /root/phase/phase-v0.3.0-ubuntu-20.04-x86_64.deb
+
 # Get pyphase for Linux
 RUN mkdir -p /root/pyphase38
 RUN wget -P /root/pyphase38 https://github.com/i3drobotics/pyphase/releases/download/v0.3.0/phase-0.3.0-cp38-cp38-linux_x86_64.whl
@@ -72,6 +77,13 @@ RUN python3 -m pip install opencv-python
 RUN wget https://github.com/i3drobotics/phobosIntegration/releases/download/v1.0.54/libicu55_55.1-7ubuntu0.5_amd64.deb
 RUN dpkg -i libicu55_55.1-7ubuntu0.5_amd64.deb
 RUN rm libicu55_55.1-7ubuntu0.5_amd64.deb
+
+# wget https://github.com/basler/pypylon/releases/download/3.0.1/pypylon-3.0.1-cp38-cp38-manylinux_2_31_x86_64.whl
+# python3 -m pip install pypylon-3.0.1-cp38-cp38-manylinux_2_31_x86_64.whl
+
+# wget https://github.com/basler/pypylon/releases/download/2.3.0/pypylon-2.3.0-cp38-cp38-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+# python3 -m pip install pypylon-2.3.0-cp38-cp38-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
+# pip install sphinx sphinx-rtd-theme setuptools wheel twine flake8 pytest pybind11-stubgen numpydoc
 
 # Clone i3drobotics repo
 RUN git clone --branch foxy-devel https://github.com/i3drobotics/phase_rtabmap_ros2.git /root/dev_ws/src/phase_rtabmap_ros2
