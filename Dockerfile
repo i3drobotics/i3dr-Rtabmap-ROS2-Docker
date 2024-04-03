@@ -47,8 +47,10 @@ WORKDIR /root/dev_ws
 
 # Install phase
 RUN mkdir -p /root/phase
-RUN wget -P /root/phase https://github.com/i3drobotics/phase/releases/download/v0.3.0/phase-v0.3.0-ubuntu-20.04-x86_64.deb
-RUN apt install -f /root/phase/phase-v0.3.0-ubuntu-20.04-x86_64.deb
+WORKDIR /root/phase
+RUN wget https://github.com/i3drobotics/phase/releases/download/v0.3.0/phase-v0.3.0-ubuntu-20.04-x86_64.deb
+RUN apt install -f ./phase-v0.3.0-ubuntu-20.04-x86_64.deb
+WORKDIR /root/dev_ws
 
 # Get pyphase for Linux
 RUN mkdir -p /root/pyphase38
