@@ -117,6 +117,10 @@ COPY ./plotter.py plotter.py
 ADD ./calibration calibration
 ADD ./licenses licenses
 
+# Add pyphase utils wheel and install it
+ADD ./pyphase_utils pyphase_utils
+RUN python3 -m pip install ./pyphase_utils/pyphaseutils-1.0-py3-none-any.whl
+
 # Add a script that sets the hostid by setting the ip
 COPY ./license_scripts/lic_setup.sh lic_setup.sh
 
