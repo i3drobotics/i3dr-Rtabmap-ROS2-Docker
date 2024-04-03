@@ -4,12 +4,30 @@ Creating a Docker image to set up a ROS2 workspace that integrates pyphase and r
 
 
 ## Ubuntu Host Machine
+
+### Requirements
+- Nvidia graphics card
+- Nvidia drivers
+- Virtualisation enabled in BIOS
+
 ### Install Docker
 Install docker using these instructions: https://docs.docker.com/engine/install/ubuntu/
 
 ### Install Xorg
 ```
 sudo apt-get install xorg openbox
+```
+
+### Checking Installs
+Check that the correct nvidia drivers are installed with the following commands:
+```
+nvcc --version
+nvidia-smi
+cat /proc/driver/nvidia/version
+```
+Check Docker is installed correctly by running:
+```
+sudo docker run hello-world
 ```
 
 ### Building the Image
