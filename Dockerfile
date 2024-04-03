@@ -32,6 +32,10 @@ RUN apt update && apt install -y --no-install-recommends \
     # cleanup
     && rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
 
+# Install pip
+RUN apt-get install -y python3-pip && \
+    python3 -m pip install pip --upgrade
+
 # Install pylon
 RUN wget https://www2.baslerweb.com/media/downloads/software/pylon_software/pylon_7_4_0_14900_linux_x86_64_debs.tar.gz && \
     tar -xvf pylon_7_4_0_14900_linux_x86_64_debs.tar.gz && \
@@ -77,8 +81,8 @@ RUN apt install -y libgstreamer1.0-0 libgstreamer-plugins-base1.0-0
 RUN apt install -y zlib1g libstdc++6
 RUN apt install -y libc6 libgcc1
 
-# Install pip
-RUN apt-get install -y python3-pip
+# Install pypylon
+RUN python3 -m pip install pypylon
 
 # Install pyphase and then delete wheel file 
 RUN python3 -m pip install /root/pyphase38/phase-0.3.0-cp38-cp38-linux_x86_64.whl \
@@ -92,13 +96,6 @@ RUN python3 -m pip install opencv-python
 RUN wget https://github.com/i3drobotics/phobosIntegration/releases/download/v1.0.54/libicu55_55.1-7ubuntu0.5_amd64.deb && \
     dpkg -i libicu55_55.1-7ubuntu0.5_amd64.deb && \
     rm libicu55_55.1-7ubuntu0.5_amd64.deb
-
-# Can't seem to install pypylon, maybe use some of these?
-# wget https://github.com/basler/pypylon/releases/download/3.0.1/pypylon-3.0.1-cp38-cp38-manylinux_2_31_x86_64.whl
-# python3 -m pip install pypylon-3.0.1-cp38-cp38-manylinux_2_31_x86_64.whl
-# wget https://github.com/basler/pypylon/releases/download/2.3.0/pypylon-2.3.0-cp38-cp38-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
-# python3 -m pip install pypylon-2.3.0-cp38-cp38-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl
-# pip install sphinx sphinx-rtd-theme setuptools wheel twine flake8 pytest pybind11-stubgen numpydoc
 
 # Clone i3drobotics repo
 RUN git clone --branch foxy-devel https://github.com/i3drobotics/phase_rtabmap_ros2.git /root/dev_ws/src/phase_rtabmap_ros2
