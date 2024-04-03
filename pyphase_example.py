@@ -1,24 +1,28 @@
 #!/usr/bin/env python3
 
 import phase.pyphase as phase
+from pyphaseutils.devices import listDevices
 import cv2
 from pathlib import Path
 
 def main():
-    device_infos = phase.stereocamera.availableDevices()
-    if len(device_infos) <= 0:
+    devices = listDevices()
+
+    # ignore virtual_images
+    devices = [device for device in devices if not device.getUniqueSerial()=="virtual_images"]
+
+    if len(devices) <= 0:
         print("No devices found")
         return
 
-    for device_info in device_infos:
+    for device in devices:
         print("*****************************")
-        print("Camera Name: " + device_info.getUniqueSerial())
-        print("Left Serial: " + device_info.getLeftCameraSerial())
-        print("Right Serial: " + device_info.getRightCameraSerial())
+        print("Camera Name: " + device.getUniqueSerial())
+        print("Left Serial: " + device.getLeftCameraSerial())
+        print("Right Serial: " + device.getRightCameraSerial())
 
     # Choose first camera
-
-    first_device = device_infos[0]
+    first_device = devices[0]
 
     camera_name = first_device.getUniqueSerial()
     left_serial = first_device.getLeftCameraSerial()
