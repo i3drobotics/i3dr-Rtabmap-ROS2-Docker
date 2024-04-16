@@ -66,7 +66,7 @@ WORKDIR /root/dev_ws
 
 # Install phase
 RUN wget https://github.com/i3drobotics/phase/releases/download/v0.3.0/phase-v0.3.0-ubuntu-20.04-x86_64.deb && \
-    apt-get update && \
+    apt update && \
     apt install -f -y --no-install-recommends ./phase-v0.3.0-ubuntu-20.04-x86_64.deb && \
     rm -rf ./phase-v0.3.0-ubuntu-20.04-x86_64.deb
 
