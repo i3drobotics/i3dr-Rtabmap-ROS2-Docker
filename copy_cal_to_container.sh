@@ -7,7 +7,7 @@ script_dir="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 calibration_data_folder="$script_dir/calibration"
 
 # Define the destination folder path
-destination_folder="frtab:/root/dev_ws/install/phase_rtabmap_ros2/share/phase_rtabmap_ros2/cal"
+destination_folder="frtab:/root/ros2_ws/install/phase_rtabmap_ros2/share/phase_rtabmap_ros2/cal"
 
 # Check if the folder exists
 if [ ! -d "$calibration_data_folder" ]; then
