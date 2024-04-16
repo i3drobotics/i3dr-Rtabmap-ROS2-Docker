@@ -36,7 +36,7 @@ sudo docker run hello-world
 
 ### Running a Container from the Image
 1. Run [run.sh](run.sh).
-2. Inside the container ensure you are in /root/dev_ws and run:
+2. Inside the container ensure you are in /root/ros2_ws and run:
 ```
 source /opt/ros/foxy/setup.bash
 rosdep update && rosdep install --from-paths src --ignore-src -r -y
@@ -90,7 +90,7 @@ This only needs to be done once as the image will be stored locally.
 ### Running a Container from the Image
 1. Run Xming. When it is running you will see an X icon in the system tray.
 2. Start the container with [run.bat](run.bat).
-3. Inside the container ensure you are in /root/dev_ws and run:
+3. Inside the container ensure you are in /root/ros2_ws and run:
 ```
 source /opt/ros/foxy/setup.bash
 rosdep update && rosdep install --from-paths src --ignore-src -r -y
