@@ -61,8 +61,9 @@ RUN apt-get update && \
 SHELL ["/bin/bash", "-c"]
 
 # Create dev workspace
-RUN mkdir -p /root/dev_ws/src
-WORKDIR /root/dev_ws
+ARG WORKSPACE_NAME=ros2_ws
+RUN mkdir -p /root/${WORKSPACE_NAME}/src
+WORKDIR /root/${WORKSPACE_NAME}
 
 # Install phase
 RUN wget https://github.com/i3drobotics/phase/releases/download/v0.3.0/phase-v0.3.0-ubuntu-20.04-x86_64.deb && \
@@ -98,7 +99,7 @@ RUN wget https://github.com/i3drobotics/phobosIntegration/releases/download/v1.0
     rm libicu55_55.1-7ubuntu0.5_amd64.deb
 
 # Clone i3drobotics repo
-RUN git clone --branch foxy-devel https://github.com/i3drobotics/phase_rtabmap_ros2.git /root/dev_ws/src/phase_rtabmap_ros2
+RUN git clone --branch foxy-devel https://github.com/i3drobotics/phase_rtabmap_ros2.git /root/${WORKSPACE_NAME}/src/phase_rtabmap_ros2
 
 # Install rosdep and colcon
 RUN apt-get update
@@ -124,7 +125,7 @@ RUN python3 -m pip install ./pyphase_utils/pyphaseutils-1.0-py3-none-any.whl
 # Add a script that sets the hostid by setting the ip
 COPY ./license_scripts/lic_setup.sh lic_setup.sh
 
-WORKDIR /root/dev_ws
+WORKDIR /root/${WORKSPACE_NAME}
 
 # Manually run:
 #source /opt/ros/foxy/setup.bash
