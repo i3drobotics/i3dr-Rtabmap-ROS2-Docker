@@ -53,7 +53,8 @@ RUN wget https://www2.baslerweb.com/media/downloads/software/pylon_software/pylo
 # Install ROS 2 Foxy dependencies
 RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
 RUN sh -c 'echo "deb [arch=amd64,arm64] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros2-latest.list'
-RUN apt-get update
+RUN apt-get update --fix-missing
+RUN apt-get upgrade -y
 RUN apt-get install -y --no-install-recommends ros-foxy-desktop && \
     rm -rf /var/lib/apt/lists/*
 
