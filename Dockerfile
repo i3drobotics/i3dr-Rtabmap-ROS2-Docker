@@ -54,7 +54,6 @@ RUN wget https://www2.baslerweb.com/media/downloads/software/pylon_software/pylo
 RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
 RUN sh -c 'echo "deb [arch=amd64,arm64] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros2-latest.list'
 RUN apt-get update --fix-missing
-RUN apt-get upgrade -y
 RUN apt-get install -y --no-install-recommends ros-foxy-desktop && \
     rm -rf /var/lib/apt/lists/*
 
@@ -67,8 +66,8 @@ WORKDIR /root/${WORKSPACE_NAME}
 
 # Install phase
 RUN wget https://github.com/i3drobotics/phase/releases/download/v0.3.0/phase-v0.3.0-ubuntu-20.04-x86_64.deb && \
-    apt update && \
-    apt install -f -y --no-install-recommends ./phase-v0.3.0-ubuntu-20.04-x86_64.deb && \
+    apt-get update --fix-missing && \
+    apt-get install -f -y --no-install-recommends ./phase-v0.3.0-ubuntu-20.04-x86_64.deb && \
     rm -rf ./phase-v0.3.0-ubuntu-20.04-x86_64.deb
 
 # Get pyphase for Linux
@@ -76,11 +75,11 @@ RUN wget -P /root/pyphase38 https://github.com/i3drobotics/pyphase/releases/down
 
 # Install pyphase dependencies
 RUN apt-get update
-RUN apt install -y libavcodec-dev libavformat-dev libswscale-dev
-RUN apt install -y libgl-dev liblapack-dev libblas-dev libgtk2.0-dev
-RUN apt install -y libgstreamer1.0-0 libgstreamer-plugins-base1.0-0
-RUN apt install -y zlib1g libstdc++6
-RUN apt install -y libc6 libgcc1
+RUN apt-get install -y libavcodec-dev libavformat-dev libswscale-dev
+RUN apt-get install -y libgl-dev liblapack-dev libblas-dev libgtk2.0-dev
+RUN apt-get install -y libgstreamer1.0-0 libgstreamer-plugins-base1.0-0
+RUN apt-get install -y zlib1g libstdc++6
+RUN apt-get install -y libc6 libgcc1
 
 # Install pypylon
 RUN python3 -m pip install pypylon
@@ -90,8 +89,8 @@ RUN python3 -m pip install /root/pyphase38/phase-0.3.0-cp38-cp38-linux_x86_64.wh
     && rm -r /root/pyphase38
 
 # upgrade numpy, install opencv
-RUN python3 -m pip install numpy --upgrade
-RUN python3 -m pip install opencv-python
+RUN python3 -m pip install numpy --upgrade && \
+    python3 -m pip install opencv-python
 
 # Install missing pyphase dependency
 RUN wget https://github.com/i3drobotics/phobosIntegration/releases/download/v1.0.54/libicu55_55.1-7ubuntu0.5_amd64.deb && \
