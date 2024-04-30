@@ -98,6 +98,7 @@ RUN wget https://github.com/i3drobotics/phobosIntegration/releases/download/v1.0
     rm libicu55_55.1-7ubuntu0.5_amd64.deb
 
 # Clone i3drobotics repo
+# 
 RUN git clone --branch foxy-devel https://github.com/i3drobotics/phase_rtabmap_ros2.git /root/${WORKSPACE_NAME}/src/phase_rtabmap_ros2
 
 # Install rosdep and colcon
@@ -108,6 +109,8 @@ RUN python3 -m pip install pytest==7.2
 
 # for matplotlib gui
 RUN apt-get install -y python3-tk
+
+# RUN apt-get install -y ros-foxy-diagnostic-updater
 
 # Add calibration files, licenses and pyphase_example to the image
 RUN mkdir -p /root/data/pointclouds
