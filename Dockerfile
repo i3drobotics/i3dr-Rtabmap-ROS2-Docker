@@ -98,7 +98,7 @@ RUN wget https://github.com/i3drobotics/phobosIntegration/releases/download/v1.0
     rm libicu55_55.1-7ubuntu0.5_amd64.deb
 
 # Clone i3drobotics repo
-# 
+RUN apt-get update
 RUN git clone --branch foxy-devel https://github.com/i3drobotics/phase_rtabmap_ros2.git /root/${WORKSPACE_NAME}/src/phase_rtabmap_ros2
 
 # Install rosdep and colcon
