@@ -92,8 +92,8 @@ RUN git clone --branch humble-devel https://github.com/i3drobotics/phase_rtabmap
 
 # Install rosdep and colcon
 RUN apt-get update
-RUN python3 -m pip install -U rosdep && rosdep init
-RUN python3 -m pip install -U colcon-common-extensions
+# RUN python3 -m pip install -U rosdep && rosdep init
+# RUN python3 -m pip install -U colcon-common-extensions
 RUN python3 -m pip install pytest==7.2
 
 # for matplotlib gui
