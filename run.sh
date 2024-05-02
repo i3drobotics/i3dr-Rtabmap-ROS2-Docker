@@ -55,8 +55,7 @@ sudo docker run -it \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     $device_flags \
     --hostname I3DRWL004 \
-    humble-rtabmap-pyphase \
-    /bin/bash -c "export ROS_NAMESPACE=rtabmap && rosrun rtabmap_viz rtabmap_viz"
+    humble-rtabmap-pyphase
 
 # sudo docker run -it \
 #     $rm_flag \
