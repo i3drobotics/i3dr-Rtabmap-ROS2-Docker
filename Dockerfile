@@ -117,6 +117,7 @@ COPY ./license_scripts/lic_setup.sh lic_setup.sh
 WORKDIR /root/${WORKSPACE_NAME}
 
 # Manually run:
+# rosdep fix-permissions
 # source /opt/ros/humble/setup.bash
 # sudo apt-get update
 # rosdep update && rosdep install --from-paths src --ignore-src -r -y

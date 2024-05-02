@@ -36,6 +36,11 @@ fi
 # Start X server
 xhost +
 
+# those following 3 lines would need to be done only one time
+XAUTH=/tmp/.docker.xauth
+touch $XAUTH
+xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
+
 # Run Docker container with GUI support
 # May need to change --device paths depending on your system
 sudo docker run -it \
@@ -50,7 +55,8 @@ sudo docker run -it \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     $device_flags \
     --hostname I3DRWL004 \
-    humble-rtabmap-pyphase
+    humble-rtabmap-pyphase \
+    /bin/bash -c "export ROS_NAMESPACE=rtabmap && rosrun rtabmap_viz rtabmap_viz"
 
 # sudo docker run -it \
 #     $rm_flag \
