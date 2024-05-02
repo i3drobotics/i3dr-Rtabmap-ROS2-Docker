@@ -39,21 +39,6 @@ sudo docker run hello-world
 2. Inside the container ensure you are in /root/ros2_ws and run:
 ```
 source /opt/ros/foxy/setup.bash
-rosdep update && rosdep install --from-paths src --ignore-src -r -y
-export MAKEFLAGS="-j6" # Can be ignored if you have a lot of RAM (>16GB)
-colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
-. install/setup.bash
-source /root/data/lic_setup.sh
-```
-
-```
-cd /root/ros2_ws
-source /opt/ros/foxy/setup.bash
-git clone --branch foxy https://github.com/ros-perception/image_pipeline.git src/image_pipeline
-git clone --branch foxy https://github.com/ros-perception/image_common.git src/image_common
-git clone --branch foxy-devel https://github.com/ros-perception/perception_pcl.git src/perception_pcl
-git clone https://github.com/introlab/rtabmap.git src/rtabmap
-git clone --branch ros2 https://github.com/introlab/rtabmap_ros.git src/rtabmap_ros
 apt-get update
 rosdep update && rosdep install --from-paths src --ignore-src -r -y
 export MAKEFLAGS="-j6" # Can be ignored if you have a lot of RAM (>16GB)
@@ -63,9 +48,9 @@ source /root/data/lic_setup.sh
 ```
 
 ### Test the camera
-Inside the container navigate to ~/data and run:
+Inside the container run:
 ```
-python3 pyphase_example.py
+python3 ~/data/pyphase_example.py
 ```
 
 ### Running a RTabMap Scan

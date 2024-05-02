@@ -97,9 +97,14 @@ RUN wget https://github.com/i3drobotics/phobosIntegration/releases/download/v1.0
     dpkg -i libicu55_55.1-7ubuntu0.5_amd64.deb && \
     rm libicu55_55.1-7ubuntu0.5_amd64.deb
 
-# Clone i3drobotics repo
+# Clone i3drobotics, ros, rtabmap repos
 RUN apt-get update
 RUN git clone --branch foxy-devel https://github.com/i3drobotics/phase_rtabmap_ros2.git /root/${WORKSPACE_NAME}/src/phase_rtabmap_ros2
+RUN git clone --branch foxy https://github.com/ros-perception/image_pipeline.git /root/${WORKSPACE_NAME}/src/image_pipeline
+RUN git clone --branch foxy https://github.com/ros-perception/image_common.git /root/${WORKSPACE_NAME}/src/image_common
+RUN git clone --branch foxy-devel https://github.com/ros-perception/perception_pcl.git /root/${WORKSPACE_NAME}/src/perception_pcl
+RUN git clone --branch foxy-devel https://github.com/introlab/rtabmap.git /root/${WORKSPACE_NAME}/src/rtabmap
+RUN git clone --branch ros2 https://github.com/introlab/rtabmap_ros.git /root/${WORKSPACE_NAME}/src/rtabmap_ros
 
 # Install rosdep and colcon
 RUN apt-get update
@@ -130,9 +135,10 @@ COPY ./license_scripts/lic_setup.sh lic_setup.sh
 WORKDIR /root/${WORKSPACE_NAME}
 
 # Manually run:
-#source /opt/ros/foxy/setup.bash
-#rosdep update && rosdep install --from-paths src --ignore-src -r -y
-#export MAKEFLAGS="-j6" # Can be ignored if you have a lot of RAM (>16GB)
-#colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
-#. install/setup.bash
-#source /root/data/lic_setup.sh
+# source /opt/ros/foxy/setup.bash
+# apt-get update
+# rosdep update && rosdep install --from-paths src --ignore-src -r -y
+# export MAKEFLAGS="-j6" # Can be ignored if you have a lot of RAM (>16GB)
+# colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
+# . install/setup.bash
+# source /root/data/lic_setup.sh
