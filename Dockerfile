@@ -48,7 +48,6 @@ RUN wget https://www2.baslerweb.com/media/downloads/software/pylon_software/pylo
 ARG WORKSPACE_NAME=ros2_ws
 RUN mkdir -p /root/${WORKSPACE_NAME}/src
 WORKDIR /root/${WORKSPACE_NAME}
-RUN source /opt/ros/humble/setup.bash
 
 # Install phase
 RUN wget https://github.com/i3drobotics/phase/releases/download/v0.3.0/phase-v0.3.0-ubuntu-20.04-x86_64.deb && \
