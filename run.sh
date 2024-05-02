@@ -40,13 +40,19 @@ xhost +
 # May need to change --device paths depending on your system
 sudo docker run -it \
     $rm_flag \
-    --name frtab \
+    --name rtab \
     --gpus all \
     -e DISPLAY=$DISPLAY \
+    -e QT_X11_NO_MITSHM=1 \
+    -e NVIDIA_VISIBLE_DEVICES=all \
+    -e NVIDIA_DRIVER_CAPABILITIES=all \
+    -e XAUTHORITY=$XAUTH \
+    --runtime=nvidia \
+    --network host \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     $device_flags \
     --hostname I3DRWL004 \
-    foxy-rtabmap-pyphase
+    humble-rtabmap-pyphase
 
 # Revoke access to X server
 xhost -
