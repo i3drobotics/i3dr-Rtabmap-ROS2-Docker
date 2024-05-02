@@ -71,7 +71,7 @@ RUN python3 -m pip install pypylon
 
 # Install pyphase and then delete wheel file 
 RUN python3 -m pip install /root/pyphase310/phase-0.3.0-cp310-cp310-linux_x86_64.whl \
-    && rm -r /root/pyphase10
+    && rm -r /root/pyphase310
 
 # upgrade numpy, install opencv
 RUN python3 -m pip install numpy --upgrade && \
