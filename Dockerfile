@@ -56,7 +56,7 @@ RUN wget https://github.com/i3drobotics/phase/releases/download/v0.3.0/phase-v0.
     rm -rf ./phase-v0.3.0-ubuntu-20.04-x86_64.deb
 
 # Get pyphase for Linux
-RUN wget -P /root/pyphase310 https://github.com/i3drobotics/pyphase/releases/download/v0.3.0/phase-0.3.0-cp10-cp310-linux_x86_64.whl
+RUN wget -P /root/pyphase310 https://github.com/i3drobotics/pyphase/releases/download/v0.3.0/phase-0.3.0-cp310-cp310-linux_x86_64.whl
 
 # Install pyphase dependencies
 RUN apt-get update
