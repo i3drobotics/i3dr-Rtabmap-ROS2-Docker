@@ -1,144 +1,83 @@
-FROM nvidia/cudagl:11.4.2-devel-ubuntu20.04
+FROM nvidia/cuda:12.1.1-cudnn8-devel-ubuntu22.04 as runtime
 
-ENV DEBIAN_FRONTEND=noninteractive
+ARG DEBIAN_FRONTEND=noninteractive
 
-# Setup nvidia-docker hooks
-LABEL com.nvidia.volumes.needed="nvidia_driver"
-ENV PATH /usr/local/nvidia/bin:${PATH}
-ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64:${LD_LIBRARY_PATH}
-ENV NVIDIA_VISIBLE_DEVICES \
-    ${NVIDIA_VISIBLE_DEVICES:-all}
-ENV NVIDIA_DRIVER_CAPABILITIES \
-    ${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}graphics
+# Uncomment the lines below to use a 3rd party repository
+# to get the latest (unstable from mesa/main) mesa library version
+# RUN apt-get update && apt install -y software-properties-common
+# RUN add-apt-repository ppa:oibaf/graphics-drivers -y
 
-# CUDA variables required JIT compilation
-# CUDA_CACHE_PATH should be used to attach a volume for caching the JIT compilation
-ENV CUDA_CACHE_MAXSIZE=2147483647
-ENV CUDA_CACHE_DISABLE=0
-ENV CUDA_CACHE_PATH=/root/.nv/ComputeCache
+# RUN apt update && apt install -y \
+#     vainfo \
+#     mesa-va-drivers \
+#     mesa-utils
 
-# Install required software
-RUN apt update && apt install -y --no-install-recommends \
-        sudo \
-        software-properties-common \
-        ca-certificates \
-        build-essential \
-        cmake \
-        git \
-        curl \
-        wget \
-    && apt-get -y autoremove \
-    && apt-get clean \
-    # cleanup
-    && rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
+# ENV LIBVA_DRIVER_NAME=d3d12
+# ENV LD_LIBRARY_PATH=/usr/lib/wsl/lib
+# CMD vainfo --display drm --device /dev/dri/card0
 
-# Install pip
-RUN apt-get install -y python3-pip && \
-    python3 -m pip install pip --upgrade
+RUN apt update && apt install -y
+# Install curl, python, pip, and python3-tk for displaying matplotlib GUI
+RUN apt install curl -y && \
+    apt install wget -y && \
+    apt install git -y && \
+    apt install python3 -y && \
+    apt install python3-pip -y && \
+    apt install python3-tk -y
 
-# Install pylon
-RUN wget https://www2.baslerweb.com/media/downloads/software/pylon_software/pylon_7_4_0_14900_linux_x86_64_debs.tar.gz && \
-    tar -xvf pylon_7_4_0_14900_linux_x86_64_debs.tar.gz && \
-    dpkg -i pylon_7.4.0.14900-deb0_amd64.deb && \
-    rm -rf pylon_7_4_0_14900_linux_x86_64_debs.tar.gz pylon_7.4.0.14900-deb0_amd64.deb
+RUN pip3 install matplotlib
 
-# RUN wget https://bugs.launchpad.net/~ubuntu-security-proposed/+archive/ubuntu/ppa/+build/18845128/+files/libicu55_55.1-7ubuntu0.5_amd64.deb && \
-#     wget http://security.ubuntu.com/ubuntu/pool/universe/x/xerces-c/libxerces-c3.1_3.1.3+debian-1_amd64.deb && \
-#     wget https://launchpad.net/~ubuntu-security/+archive/ubuntu/ppa/+build/15108504/+files/libpng12-0_1.2.54-1ubuntu1.1_amd64.deb && \
-#     dpkg -i libicu55_55.1-7ubuntu0.5_amd64.deb && \
-#     dpkg -i libxerces-c3.1_3.1.3+debian-1_amd64.deb && \
-#     dpkg -i libpng12-0_1.2.54-1ubuntu1.1_amd64.deb && \
-#     rm -rf libicu55_55.1-7ubuntu0.5_amd64.deb libxerces-c3.1_3.1.3+debian-1_amd64.deb libpng12-0_1.2.54-1ubuntu1.1_amd64.deb
+# Install ROS2 humble
+RUN apt update && apt install locales
+RUN locale-gen en_US en_US.UTF-8 && \
+    update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 && \
+    export LANG=en_US.UTF-8
+RUN apt install software-properties-common -y && \
+    add-apt-repository universe -y
+RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null
+RUN apt update && apt upgrade -y
+RUN apt install ros-humble-desktop -y
+SHELL ["/bin/bash", "-c"] 
+RUN source /opt/ros/humble/setup.bash
 
-# Install ROS 2 Foxy dependencies
-RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
-RUN sh -c 'echo "deb [arch=amd64,arm64] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" > /etc/apt/sources.list.d/ros2-latest.list'
-RUN apt-get update --fix-missing
-RUN apt-get install -y --no-install-recommends ros-foxy-desktop && \
-    rm -rf /var/lib/apt/lists/*
+# Install rosdep
+RUN apt install python3-rosdep2 -y
+RUN rosdep init; exit 0
+# added exit 0 because rosdep init gives:
+# "ERROR: default sources list file already exists: /etc/ros/rosdep/sources.list.d/20-default.list Please delete if you wish to re-initialize"
+RUN rosdep update
 
-SHELL ["/bin/bash", "-c"]
-
-# Create dev workspace
-ARG WORKSPACE_NAME=ros2_ws
-RUN mkdir -p /root/${WORKSPACE_NAME}/src
-WORKDIR /root/${WORKSPACE_NAME}
-
-# Install phase
-RUN wget https://github.com/i3drobotics/phase/releases/download/v0.3.0/phase-v0.3.0-ubuntu-20.04-x86_64.deb && \
-    apt-get update --fix-missing && \
-    apt-get install -f -y --no-install-recommends ./phase-v0.3.0-ubuntu-20.04-x86_64.deb && \
-    rm -rf ./phase-v0.3.0-ubuntu-20.04-x86_64.deb
-
-# Get pyphase for Linux
-RUN wget -P /root/pyphase38 https://github.com/i3drobotics/pyphase/releases/download/v0.3.0/phase-0.3.0-cp38-cp38-linux_x86_64.whl
-
-# Install pyphase dependencies
-RUN apt-get update
-RUN apt-get install -y libavcodec-dev libavformat-dev libswscale-dev
-RUN apt-get install -y libgl-dev liblapack-dev libblas-dev libgtk2.0-dev
-RUN apt-get install -y libgstreamer1.0-0 libgstreamer-plugins-base1.0-0
-RUN apt-get install -y zlib1g libstdc++6
-RUN apt-get install -y libc6 libgcc1
-
-# Install pypylon
-RUN python3 -m pip install pypylon
-
-# Install pyphase and then delete wheel file 
-RUN python3 -m pip install /root/pyphase38/phase-0.3.0-cp38-cp38-linux_x86_64.whl \
-    && rm -r /root/pyphase38
-
-# upgrade numpy, install opencv
-RUN python3 -m pip install numpy --upgrade && \
-    python3 -m pip install opencv-python
-
-# Install missing pyphase dependency
-RUN wget https://github.com/i3drobotics/phobosIntegration/releases/download/v1.0.54/libicu55_55.1-7ubuntu0.5_amd64.deb && \
-    dpkg -i libicu55_55.1-7ubuntu0.5_amd64.deb && \
-    rm libicu55_55.1-7ubuntu0.5_amd64.deb
-
-# Clone i3drobotics, ros, rtabmap repos
-RUN apt-get update
-RUN git clone --branch foxy-devel https://github.com/i3drobotics/phase_rtabmap_ros2.git /root/${WORKSPACE_NAME}/src/phase_rtabmap_ros2
-RUN git clone --branch foxy https://github.com/ros-perception/image_pipeline.git /root/${WORKSPACE_NAME}/src/image_pipeline
-RUN git clone --branch foxy https://github.com/ros-perception/image_common.git /root/${WORKSPACE_NAME}/src/image_common
-RUN git clone --branch foxy-devel https://github.com/ros-perception/perception_pcl.git /root/${WORKSPACE_NAME}/src/perception_pcl
-RUN git clone --branch foxy-devel https://github.com/introlab/rtabmap.git /root/${WORKSPACE_NAME}/src/rtabmap
-RUN git clone --branch ros2 https://github.com/introlab/rtabmap_ros.git /root/${WORKSPACE_NAME}/src/rtabmap_ros
-
-# Install rosdep and colcon
-RUN apt-get update
-RUN python3 -m pip install -U rosdep && rosdep init
-RUN python3 -m pip install -U colcon-common-extensions
-RUN python3 -m pip install pytest==7.2
-
-# for matplotlib gui
-RUN apt-get install -y python3-tk
-
-# RUN apt-get install -y ros-foxy-diagnostic-updater
-
-# Add calibration files, licenses and pyphase_example to the image
-RUN mkdir -p /root/data/pointclouds
+# Get test matplotlib script
+RUN mkdir /root/data
 WORKDIR /root/data
-COPY ./example_scripts/pyphase_example.py pyphase_example.py
 COPY ./example_scripts/plotter.py plotter.py
-ADD ./calibration calibration
-ADD ./licenses licenses
 
-# Add pyphase utils wheel and install it
-ADD ./pyphase_utils pyphase_utils
-RUN python3 -m pip install ./pyphase_utils/pyphaseutils-1.0-py3-none-any.whl
+# install pyphase
+RUN apt install -y libavcodec-dev libavformat-dev libswscale-dev
+RUN apt install -y libgl-dev liblapack-dev libblas-dev libgtk2.0-dev
+RUN apt install -y libgstreamer1.0-0 libgstreamer-plugins-base1.0-0
+RUN apt install -y zlib1g libstdc++6
+RUN apt install -y libc6 libgcc1
+RUN wget https://github.com/i3drobotics/pyphase/releases/download/v0.3.0/phase-0.3.0-cp310-cp310-linux_x86_64.whl && \
+    pip3 install ./phase-0.3.0-cp310-cp310-linux_x86_64.whl && \
+    rm ./phase-0.3.0-cp310-cp310-linux_x86_64.whl
+RUN pip3 install pypylon
 
-# Add a script that sets the hostid by setting the ip
-COPY ./license_scripts/lic_setup.sh lic_setup.sh
+RUN apt install python3-colcon-common-extensions -y
+RUN apt install cmake -y
 
-WORKDIR /root/${WORKSPACE_NAME}
+SHELL ["/bin/sh", "-c"] 
 
-# Manually run:
-# source /opt/ros/foxy/setup.bash
-# apt-get update
-# rosdep update && rosdep install --from-paths src --ignore-src -r -y
-# export MAKEFLAGS="-j6" # Can be ignored if you have a lot of RAM (>16GB)
-# colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
-# . install/setup.bash
-# source /root/data/lic_setup.sh
+# clone rtabmap and phase_rtabmap_ros2 and then build
+RUN mkdir /root/ros2_ws
+WORKDIR /root/ros2_ws
+RUN git clone https://github.com/introlab/rtabmap.git src/rtabmap
+RUN git clone --branch ros2 https://github.com/introlab/rtabmap_ros.git src/rtabmap_ros
+RUN git clone --branch humble-devel https://github.com/i3drobotics/phase_rtabmap_ros2.git src/phase_rtabmap_ros2
+RUN rosdep update && rosdep install --from-paths src --ignore-src -r -y
+RUN export MAKEFLAGS="-j6"
+#RUN colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
+#RUN . install/setup.bash
+
+# WIP
